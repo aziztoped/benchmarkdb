@@ -26,7 +26,7 @@ func init() {
 	var err error
 	var dbStr, dbDriver string
 
-	DBtype = "mysql" //change this value & adjust connection below
+	DBtype = "postgre" //change this value & adjust connection below
 
 	//init connection
 	switch DBtype {

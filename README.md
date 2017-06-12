@@ -40,14 +40,33 @@ CREATE TABLE `product_shippings` (
 ### Run
 
 ```
-$ git clone <git-repo-url>
+$ git clone https://github.com/aziztoped/benchmarkdb
 $ cd benchmarkdb
 $ go build
-$ ./kecoadb
+$ ./benchmarkdb
+    loop i = 1
     set iteration n to 1000
-    test write done in 0.003378 second
-    test read using where done in 0.000534 second
-    test read without where condition done in 0.000459 second
+    test write done in 0.001664 second
+    test read using where done in 0.000007 second
+    test read without where condition done in 0.000002 second
+    ====================
+    loop i = 2
+    set iteration n to 1000
+    test write done in 0.001410 second
+    test read using where done in 0.000004 second
+    test read without where condition done in 0.000001 second
+    ====================
+    loop i = 3
+    set iteration n to 1000
+    test write done in 0.001475 second
+    test read using where done in 0.000003 second
+    test read without where condition done in 0.000001 second
+    ====================
+    loop i = 4
+    set iteration n to 1000
+    test write done in 0.001469 second
+    test read using where done in 0.000004 second
+    test read without where condition done in 0.000001 second
 
 ```
 ### Output Benchmark Result
@@ -57,6 +76,9 @@ output file is located at result.csv
 
 
 #### cockroachDB benchmark result
+
+cockroachDB use 3 nodes in same machine <br>
+
 <img src="results/result-cockroach.png">
 <br><br>
 Average write: 0.003860905	<br>
@@ -71,10 +93,7 @@ Average read using where query: 0.000003697182	<br>
 Average read without where query: 0.000000808635 <br><br><br>
 
 ####  mysql benchmark result<br>
-<img src="results/result-mysql.png">
-<br><br>
-Average write: 0.003860905	<br>
-Average read using where query: 0.000604311	<br>
-Average read without where query: 0.000570346<br><br><br>
+@TO-DO: no time to convert the query, will DO next day.. 
 
+ 
 
