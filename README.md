@@ -58,22 +58,22 @@ output file is located at result.csv
 cockroachDB benchmark result
 <img src="results/result-cockroach.png">
 <br><br>
-Average write: 0.003860905	
-Average read using where query: 0.000604311	
-Average read without where query: 0.000570346
+Average write: 0.003860905	<br>
+Average read using where query: 0.000604311	<br>
+Average read without where query: 0.000570346<br><br><br>
 
 postgreSQL benchmark result
 <img src="results/result-postgresql.png">
 <br><br>
-Average write: 0.003860905	
-Average read using where query: 0.000604311	
-Average read without where query: 0.000570346
+Average write: 0.003860905	<br>
+Average read using where query: 0.000604311	<br>
+Average read without where query: 0.000570346<br><br><br>
 
 mysql benchmark result
 <img src="results/result-mysql.png">
 <br><br>
-Average write: 0.003860905	
-Average read using where query: 0.000604311	
-Average read without where query: 0.000570346
+Average write: 0.003860905	<br>
+Average read using where query: 0.000604311	<br>
+Average read without where query: 0.000570346<br><br><br>
 
 
