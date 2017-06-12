@@ -15,6 +15,7 @@ import (
 )
 
 var DB *sql.DB
+var DBtype, SqlTruncate, SqlInsert, SqlRead, SqlReadUsingWhere string
 
 func random(min, max int) int {
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -23,9 +24,36 @@ func random(min, max int) int {
 
 func init() {
 	var err error
+	var dbStr, dbDriver string
+
+	DBtype = "mysql" //change this value & adjust connection below
 
 	//init connection
-	DB, err = sql.Open("postgres", "postgresql://root@localhost:26257?sslmode=disable")
+	switch DBtype {
+	case "postgre":
+		dbDriver = "postgres"
+		dbStr = "postgres://akangaziz@localhost:5432/products?sslmode=disable" //for postgreSQL
+		SqlTruncate = "truncate table product_shippings;"
+		SqlInsert = "insert into product_shippings(shop_id, shipping_ids) values($1,'|1|2|3|');"
+		SqlReadUsingWhere = "SELECT id, shop_id, shipping_ids FROM product_shippings WHERE shipping_ids LIKE '|2|' ORDER BY id DESC"
+		SqlRead = "SELECT id, shop_id, shipping_ids FROM product_shippings  ORDER BY id DESC"
+	case "mysql":
+		dbDriver = "mysql"
+		dbStr = "mysql://root:@localhost:3306/products?parseTime=true&loc=Local" //for postgreSQL
+		SqlTruncate = "truncate table product_shippings;"
+		SqlInsert = "insert into product_shippings(shop_id, shipping_ids) values($1,'|1|2|3|');"
+		SqlReadUsingWhere = "SELECT id, shop_id, shipping_ids FROM product_shippings WHERE shipping_ids LIKE '|2|' ORDER BY id DESC"
+		SqlRead = "SELECT id, shop_id, shipping_ids FROM product_shippings  ORDER BY id DESC"
+	case "cockroachDB":
+		dbDriver = "postgres"
+		dbStr = "postgresql://root@localhost:26257?sslmode=disable" //for cockroachDB
+		SqlTruncate = "truncate table products.product_shippings;"
+		SqlInsert = "insert into products.product_shippings(shop_id, shipping_ids) values($1,'|1|2|3|');"
+		SqlReadUsingWhere = "SELECT id, shop_id, shipping_ids FROM products.product_shippings WHERE product_shippings.shipping_ids LIKE '|2|' ORDER BY id DESC"
+		SqlRead = "SELECT id, shop_id, shipping_ids FROM products.product_shippings  ORDER BY id DESC"
+	}
+
+	DB, err = sql.Open(dbDriver, dbStr)
 	if err != nil {
 		log.Fatal("error connecting to the database: ", err)
 	}
@@ -38,6 +66,7 @@ func main() {
 func doTest(loop int) {
 	i := 1
 	for i <= loop {
+		fmt.Printf("loop i = %d\n", i)
 		//set n
 		n := 1000
 		fmt.Printf("set iteration n to %d\n", n)
@@ -75,7 +104,7 @@ func doTest(loop int) {
 }
 
 func truncate() {
-	if _, err := DB.Exec("truncate table products.product_shippings;"); err != nil {
+	if _, err := DB.Exec(SqlTruncate); err != nil {
 		log.Fatalf("fatal truncate DB: %s", err)
 	}
 }
@@ -84,7 +113,7 @@ func testWrite(n int) {
 	i := 1
 	for i <= n {
 		shopID := random(100, 100000)
-		if _, err := DB.Exec("insert into products.product_shippings(shop_id, shipping_ids) values($1,'|1|2|3|');", shopID); err != nil {
+		if _, err := DB.Exec(SqlInsert, shopID); err != nil {
 			log.Fatalf("fatal test write: %s", err)
 		}
 		i++
@@ -95,9 +124,9 @@ func testRead(usingWhere bool) {
 	var q string
 
 	if usingWhere {
-		q = "SELECT id, shop_id, shipping_ids FROM products.product_shippings WHERE product_shippings.shipping_ids LIKE '|2|' ORDER BY id DESC"
+		q = SqlReadUsingWhere
 	} else {
-		q = "SELECT id, shop_id, shipping_ids FROM products.product_shippings  ORDER BY id DESC"
+		q = SqlRead
 	}
 	rows, err := DB.Query(q)
 	if err != nil {
