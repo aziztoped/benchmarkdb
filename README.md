@@ -15,27 +15,22 @@ i created this simple repo to test performance for comparing postgreDB, mysql & 
 
 for cockroachDB
 ```
-create database products;
-create table products.product_shippings(id SERIAL, shop_id INT , shipping_ids string);
+create database testing;
+create table testing.shop_campaigns(id SERIAL, campaign_id INT, shop_id INT, fg_status INT, read_status INT, read_time timestamp);
 ```
 
 for postgreSQL
 ```
-CREATE TABLE "product_shippings" (
+CREATE TABLE "shop_campaigns" (
   "id" serial NOT NULL,
-  "shop_id" integer NOT NULL DEFAULT '0',
-  "shipping_ids" character varying(150) NOT NULL
+  "campaign_id" integer NOT NULL,
+  "shop_id" integer NOT NULL,
+  "fg_status" integer NOT NULL,
+  "read_status" integer NOT NULL,
+  "read_time" timestamp NOT NULL
 );
 ```
-
-for mysql 
-```
-CREATE TABLE `product_shippings` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `shop_id` int NOT NULL,
-  `shipping_ids` varchar(150) NOT NULL
-);
-```
+ 
 
 ### Run
 
